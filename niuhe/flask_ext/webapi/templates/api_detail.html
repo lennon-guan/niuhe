@@ -1,0 +1,66 @@
+<%namespace name="flask" module="flask" />
+<%inherit file="frame.inc.html"/>
+
+<%block>
+<ol class="breadcrumb">
+    <li><a href="${url_prefix}">API List</a></li>
+    <li class="active">${method_name}</li>
+</ol>
+
+<form id="id_form" action="${api_url}" method="${wrapper.http_method[0]}" taget="_blank"
+    class="form-horizontal" role="form">
+% for name, info in wrapper.request_type._get_fields():
+    <div class="form-group">
+        <label for="_id_${name}" class="col-sm-2 control-label">
+            % if info.required:
+                <span>*</span>
+            % endif
+            ${name|h}
+        </label>
+        <div class="col-sm-5">
+            <input type="text" id="_id_${name}" name="${name}"
+                class="form-control" />
+        </div>
+        % if info.optional:
+        <div class="col-sm-5">
+            <label class="inline-checkbox">
+                <input type="checkbox" checked="checked" onclick="toggleDisabled(this, '_id_${name}')" />
+                包含此字段
+            </label>
+        </div>
+        % endif
+    </div>
+	% if info.repeated:
+    <div class="form-group">
+        <label for="_id_${name}" class="col-sm-2 control-label">
+            % if info.required:
+                <span>*</span>
+            % endif
+            ${name|h}
+        </label>
+        <div class="col-sm-5">
+            <input type="text" id="_id_${name}" name="${name}"
+                class="form-control" />
+        </div>
+    </div>
+	% endif
+% endfor
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-5">
+            <button type="submit" class="btn">提交</button>
+        </div>
+    </div>
+</form>
+
+<script>
+    function toggleDisabled(el, id) {
+        var $target = $('#' + id);
+        if (this.checked) {
+            $target.removeAttr('disabled');
+        } else {
+            $target.attr('disabled', 'disabled');
+        }
+    }
+</script>
+</%block>
+

@@ -1,0 +1,36 @@
+<%namespace name="flask" module="flask" />
+<%inherit file="frame.inc.html"/>
+
+<%block>
+<ol class="breadcrumb">
+    <li class="active">API List</li>
+</ol>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>URL</th>
+            <th>API名</th>
+            <th>接受方法</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% index = 0 %>
+        % for app, cls, method_name, wrapper in api_list:
+        <%
+            url_route = app.name + '.' + cls.__name__ if isinstance(app, flask.Blueprint.func) else cls.__name__
+        %>
+        <tr>
+            <td>${ flask.url_for.func(url_route, name = wrapper.method_name) | h }</td>
+            <td>${ wrapper.method_name | h }</td>
+            <td>${ ','.join(wrapper.http_method) | h }</td>
+            <td>
+                <a href="${url_prefix}${index}">测试此接口</a>
+            </td>
+        </tr>
+        <% index += 1 %>
+        % endfor
+    </tbody>
+</table>
+</%block>
