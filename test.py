@@ -4,8 +4,7 @@
 import sys
 reload(sys)
 sys.setdefaultencoding('u8')
-from messages import *
-from fields import *
+from niuhe.proto import *
 import pprint
 
 class LoginRequest(Message):
